@@ -1,0 +1,87 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { store } from './store/store';
+
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import StudentsList from './pages/StudentsList';
+import StudentDetails from './pages/StudentDetails';
+import TasksList from './pages/TasksList';
+import CalendarView from './pages/CalendarView';
+import Header from './components/Common/Header';
+import PrivateRoute from './components/Common/PrivateRoute';
+
+function App() {
+  return (
+    <Provider store={store}>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Header />
+          <div className="container mx-auto px-4 py-8">
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route 
+                path="/dashboard" 
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/students" 
+                element={
+                  <PrivateRoute>
+                    <StudentsList />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/students/:id" 
+                element={
+                  <PrivateRoute>
+                    <StudentDetails />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/tasks" 
+                element={
+                  <PrivateRoute>
+                    <TasksList />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/calendar" 
+                element={
+                  <PrivateRoute>
+                    <CalendarView />
+                  </PrivateRoute>
+                } 
+              />
+              <Route 
+                path="/" 
+                element={
+                  <PrivateRoute>
+                    <Dashboard />
+                  </PrivateRoute>
+                } 
+              />
+              <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+          </div>
+          <ToastContainer />
+        </div>
+      </Router>
+    </Provider>
+  );
+}
+
+export default App;
