@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { store } from './store/store';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -19,8 +20,9 @@ import PrivateRoute from './components/Common/PrivateRoute';
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <div className="min-h-screen bg-gray-50">
+      <ThemeProvider>
+        <Router>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
           <Header />
           <div className="container mx-auto px-4 py-8">
             <Routes>
@@ -80,7 +82,8 @@ function App() {
           <ToastContainer />
         </div>
       </Router>
-    </Provider>
+    </ThemeProvider>
+  </Provider>
   );
 }
 
