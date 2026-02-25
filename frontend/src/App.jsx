@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { store } from './store/store';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { NotificationProvider } from './contexts/NotificationContext';
+import { SearchProvider } from './contexts/SearchContext';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -21,71 +22,73 @@ import PrivateRoute from './components/Common/PrivateRoute';
 function App() {
   return (
     <Provider store={store}>
-      <NotificationProvider>
-        <ThemeProvider>
-          <Router>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-              <Header />
-              <div className="container mx-auto px-4 py-8">
-                <Routes>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route 
-                    path="/dashboard" 
-                    element={
-                      <PrivateRoute>
-                        <Dashboard />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/students" 
-                    element={
-                      <PrivateRoute>
-                        <StudentsList />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/students/:id" 
-                    element={
-                      <PrivateRoute>
-                        <StudentDetails />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/tasks" 
-                    element={
-                      <PrivateRoute>
-                        <TasksList />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/calendar" 
-                    element={
-                      <PrivateRoute>
-                        <CalendarView />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route 
-                    path="/" 
-                    element={
-                      <PrivateRoute>
-                        <Dashboard />
-                      </PrivateRoute>
-                    } 
-                  />
-                  <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
+      <SearchProvider>
+        <NotificationProvider>
+          <ThemeProvider>
+            <Router>
+              <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+                <Header />
+                <div className="container mx-auto px-4 py-8">
+                  <Routes>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route 
+                      path="/dashboard" 
+                      element={
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/students" 
+                      element={
+                        <PrivateRoute>
+                          <StudentsList />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/students/:id" 
+                      element={
+                        <PrivateRoute>
+                          <StudentDetails />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/tasks" 
+                      element={
+                        <PrivateRoute>
+                          <TasksList />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/calendar" 
+                      element={
+                        <PrivateRoute>
+                          <CalendarView />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route 
+                      path="/" 
+                      element={
+                        <PrivateRoute>
+                          <Dashboard />
+                        </PrivateRoute>
+                      } 
+                    />
+                    <Route path="*" element={<Navigate to="/" />} />
+                  </Routes>
+                </div>
+                <ToastContainer />
               </div>
-              <ToastContainer />
-            </div>
-          </Router>
-        </ThemeProvider>
-      </NotificationProvider>
+            </Router>
+          </ThemeProvider>
+        </NotificationProvider>
+      </SearchProvider>
     </Provider>
   );
 }
