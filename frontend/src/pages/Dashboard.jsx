@@ -2,17 +2,23 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getStudents } from '../store/studentSlice';
 import { getTasks } from '../store/taskSlice';
+import { useNotifications } from '../contexts/NotificationContext';
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { students } = useSelector(state => state.students);
   const { tasks } = useSelector(state => state.tasks);
   const { user } = useSelector(state => state.auth);
+  const { checkTaskDeadlines } = useNotifications();
 
   useEffect(() => {
     dispatch(getStudents());
     dispatch(getTasks());
-  }, [dispatch]);
+    // Check for task deadlines after tasks are loaded
+    if (tasks.length > 0) {
+      checkTaskDeadlines(tasks);
+    }
+  }, [dispatch, tasks, checkTaskDeadlines]);
 
   // Calculate stats
   const totalStudents = students.length;

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/authSlice';
 import ThemeToggle from './ThemeToggle';
+import NotificationBell from './NotificationBell';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -38,6 +39,7 @@ const Header = () => {
 
         <div className="flex items-center space-x-4">
           <ThemeToggle />
+          <NotificationBell />
           {user ? (
             <div className="flex items-center space-x-4">
               <span>Welcome, {user.username}</span>
