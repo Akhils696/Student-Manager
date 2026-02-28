@@ -1,57 +1,89 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const connectDB = require('./config/db');
+const { errorHandler } = require('./middleware/errorMiddleware');
+
+// Security and utility packages
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const compression = require('compression');
+const morgan = require('morgan');
 
 // Load environment variables
 dotenv.config();
 
-const app = express();
-
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-// Conditionally connect to database (skip in test environment)
+// Only connect to database if not in test mode
 if (process.env.NODE_ENV !== 'test') {
-  const connectDB = require('./config/db');
   connectDB();
 }
 
-// Route imports
-const authRoutes = require('./routes/authRoutes');
-const studentRoutes = require('./routes/studentRoutes');
-const taskRoutes = require('./routes/taskRoutes');
+const app = express();
+
+// Set security HTTP headers
+app.use(helmet());
+
+// Development logging
+if (process.env.NODE_ENV === 'development') {
+  app.use(morgan('dev'));
+}
+
+// Limit requests from same IP
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  message: 'Too many requests from this IP, please try again later.'
+});
+app.use('/api', limiter);
+
+// Body parser middleware
+app.use(express.json({ limit: '10mb' }));
+
+// Data sanitization against NoSQL query injection
+app.use(mongoSanitize());
+
+// Data sanitization against XSS
+app.use(xss());
+
+// Enable compression
+app.use(compression());
+
+// Enable CORS
+app.use(cors());
 
 // Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/students', studentRoutes);
-app.use('/api/tasks', taskRoutes);
+app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/students', require('./routes/studentRoutes'));
+app.use('/api/tasks', require('./routes/taskRoutes'));
 
-// Test route
-app.get('/', (req, res) => {
-  res.json({ message: 'Student Planner API is running...' });
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'OK',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  });
 });
 
-// Error handling middleware
-app.use((err, req, res, next) => {
-  const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
-  res.status(statusCode);
-  res.json({
-    message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack
+// Error handler middleware
+app.use(errorHandler);
+
+// Handle 404
+app.use('*', (req, res) => {
+  res.status(404).json({ 
+    success: false, 
+    message: 'Route not found' 
   });
 });
 
 const PORT = process.env.PORT || 5000;
 
-// Export app for testing
-module.exports = app;
-
-// Only start the server if this file is run directly
-if (require.main === module) {
+// Only start the server if this file is run directly (not imported)
+if (require.main === module && process.env.NODE_ENV !== 'test') {
   const server = app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
   });
 
   // Handle unhandled promise rejections
@@ -62,3 +94,5 @@ if (require.main === module) {
     });
   });
 }
+
+module.exports = app;
