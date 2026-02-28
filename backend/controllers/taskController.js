@@ -129,6 +129,123 @@ const getTasksByStudent = asyncHandler(async (req, res) => {
   res.status(200).json(tasks);
 });
 
+// @desc    Filter tasks by criteria
+// @route   GET /api/tasks/filter
+// @access  Private
+const filterTasks = asyncHandler(async (req, res) => {
+  const { status, priority, category, startDate, endDate } = req.query;
+  
+  let filter = { userId: req.user._id };
+  
+  if (status) filter.status = status;
+  if (priority) filter.priority = priority;
+  if (category) filter.category = category;
+  if (startDate || endDate) {
+    filter.dueDate = {};
+    if (startDate) filter.dueDate.$gte = new Date(startDate);
+    if (endDate) filter.dueDate.$lte = new Date(endDate);
+  }
+  
+  const tasks = await Task.find(filter).populate('studentId', 'firstName lastName').sort({ dueDate: 1 });
+  
+  res.status(200).json(tasks);
+});
+
+// @desc    Get task statistics
+// @route   GET /api/tasks/stats
+// @access  Private
+const getTaskStats = asyncHandler(async (req, res) => {
+  const stats = await Task.aggregate([
+    { $match: { userId: req.user._id } },
+    {
+      $group: {
+        _id: '$status',
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  
+  const priorityStats = await Task.aggregate([
+    { $match: { userId: req.user._id } },
+    {
+      $group: {
+        _id: '$priority',
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+  
+  const overdueCount = await Task.countDocuments({
+    userId: req.user._id,
+    status: { $ne: 'completed' },
+    dueDate: { $lt: new Date() },
+  });
+  
+  res.status(200).json({
+    statusCounts: stats,
+    priorityCounts: priorityStats,
+    overdueCount,
+    totalCount: await Task.countDocuments({ userId: req.user._id }),
+  });
+});
+
+// @desc    Bulk create tasks
+// @route   POST /api/tasks/bulk
+// @access  Private
+const bulkCreateTasks = asyncHandler(async (req, res) => {
+  const tasksData = req.body;
+  
+  if (!Array.isArray(tasksData)) {
+    res.status(400);
+    throw new Error('Request body must be an array');
+  }
+  
+  const tasks = tasksData.map(taskData => ({
+    ...taskData,
+    userId: req.user._id,
+    status: taskData.status || 'pending',
+  }));
+  
+  const createdTasks = await Task.insertMany(tasks);
+  
+  res.status(201).json(createdTasks);
+});
+
+// @desc    Bulk update tasks
+// @route   PUT /api/tasks/bulk
+// @access  Private
+const bulkUpdateTasks = asyncHandler(async (req, res) => {
+  const { updates, ids } = req.body;
+  
+  if (!Array.isArray(ids) || !updates || Object.keys(updates).length === 0) {
+    res.status(400);
+    throw new Error('Invalid request format');
+  }
+  
+  const result = await Task.updateMany(
+    { _id: { $in: ids }, userId: req.user._id },
+    { $set: updates }
+  );
+  
+  res.status(200).json({ modifiedCount: result.modifiedCount, matchedCount: result.matchedCount });
+});
+
+// @desc    Bulk delete tasks
+// @route   DELETE /api/tasks/bulk
+// @access  Private
+const bulkDeleteTasks = asyncHandler(async (req, res) => {
+  const { ids } = req.body;
+  
+  if (!Array.isArray(ids)) {
+    res.status(400);
+    throw new Error('IDs must be provided as an array');
+  }
+  
+  const result = await Task.deleteMany({ _id: { $in: ids }, userId: req.user._id });
+  
+  res.status(200).json({ deletedCount: result.deletedCount });
+});
+
 module.exports = {
   getTasks,
   getTaskById,
@@ -136,4 +253,9 @@ module.exports = {
   updateTask,
   deleteTask,
   getTasksByStudent,
+  filterTasks,
+  getTaskStats,
+  bulkCreateTasks,
+  bulkUpdateTasks,
+  bulkDeleteTasks,
 };
