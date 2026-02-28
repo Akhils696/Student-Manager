@@ -57,6 +57,7 @@ app.use(cors());
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/students', require('./routes/studentRoutes'));
 app.use('/api/tasks', require('./routes/taskRoutes'));
+app.use('/api/util', require('./routes/utilRoutes'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
