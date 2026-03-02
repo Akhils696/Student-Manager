@@ -19,6 +19,11 @@ import CalendarView from './pages/CalendarView';
 import Header from './components/Common/Header';
 import PrivateRoute from './components/Common/PrivateRoute';
 
+// Import new auth components
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ResetPassword from './components/Auth/ResetPassword';
+import UserProfile from './components/Auth/UserProfile';
+
 function App() {
   return (
     <Provider store={store}>
@@ -32,6 +37,16 @@ function App() {
                   <Routes>
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password/:token" element={<ResetPassword />} />
+                    <Route 
+                      path="/profile" 
+                      element={
+                        <PrivateRoute>
+                          <UserProfile />
+                        </PrivateRoute>
+                      } 
+                    />
                     <Route 
                       path="/dashboard" 
                       element={
