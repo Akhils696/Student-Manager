@@ -1,14 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '../services/api';
 import { toast } from 'react-toastify';
-
-// Base URL for API
-const API_BASE_URL = 'http://localhost:5000/api';
 
 // Register user
 export const register = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/register`, userData);
+    const response = await api.post('/auth/register', userData);
     localStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error) {
@@ -20,7 +17,7 @@ export const register = createAsyncThunk('auth/register', async (userData, { rej
 // Login user
 export const login = createAsyncThunk('auth/login', async (userData, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/auth/login`, userData);
+    const response = await api.post('/auth/login', userData);
     localStorage.setItem('token', response.data.token);
     return response.data;
   } catch (error) {
