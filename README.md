@@ -24,6 +24,22 @@ A comprehensive student management application built with the MERN stack that he
 
 ## System Architecture
 
+The application follows a client-server architecture with RESTful API design.
+
+### Backend Architecture
+- **Controllers**: Handle business logic for authentication, students, and tasks
+- **Middleware**: Authentication verification, error handling, and request validation
+- **Models**: Mongoose schemas for User, Student, and Task entities
+- **Routes**: RESTful API endpoints with proper HTTP method usage
+
+### Frontend Architecture
+- **Component Library**: Modular React components organized by feature
+- **State Management**: Redux Toolkit for global state with custom hooks
+- **Context API**: Authentication context for user session management
+- **Service Layer**: Centralized API service with interceptors and error handling
+
+## Installation & Setup
+
 ### Prerequisites
 
 - Node.js (v14 or higher)
@@ -215,6 +231,19 @@ student-planner/
 - **StudentDetails**: Detailed student profile view
 - **StudentSearchFilter**: Search and filter controls
 - **DeleteConfirmation**: Confirmation modal for deletions
+
+### Task Management
+- **TaskCard**: Card component with priority and status indicators
+- **TaskTable**: Table component for task list display
+- **TaskForm**: Form for creating and editing assignments
+- **TaskDetails**: Detailed task information view
+- **TaskSearchFilter**: Search and filter by priority, status, and student
+
+### Dashboard and Layout
+- **DashboardOverview**: Main dashboard with statistics and recent activity
+- **StatCard**: Reusable statistics card component
+- **Navbar**: Main navigation bar with user authentication
+- **Footer**: Site footer with links and information
 
 ## Contributing
 
