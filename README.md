@@ -245,6 +245,15 @@ student-planner/
 - **Navbar**: Main navigation bar with user authentication
 - **Footer**: Site footer with links and information
 
+### Calendar and Notifications
+- **Calendar**: Interactive calendar view with task visualization
+- **NotificationBell**: Real-time notification system with deadline tracking
+- **NotificationUtils**: Utility functions for managing notifications
+
+### Styling and Responsive Design
+- **Responsive.css**: Comprehensive responsive design utilities
+- **DarkMode.css**: Complete dark mode theme support
+
 ## Contributing
 
 1. Fork the repository
