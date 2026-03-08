@@ -1,0 +1,138 @@
+/* Dark Mode Theme Utilities */
+
+.dark {
+  /* Background colors */
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --bg-tertiary: #4a5568;
+  
+  /* Text colors */
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --text-tertiary: #cbd5e0;
+  
+  /* Border colors */
+  --border-primary: #4a5568;
+  --border-secondary: #718096;
+  
+  /* Accent colors */
+  --accent-blue: #4299e1;
+  --accent-green: #48bb78;
+  --accent-red: #f56565;
+  --accent-yellow: #ecc94b;
+}
+
+.dark body {
+  @apply bg-gray-900 text-gray-100;
+}
+
+.dark .bg-white {
+  @apply bg-gray-800;
+}
+
+.dark .bg-gray-50 {
+  @apply bg-gray-700;
+}
+
+.dark .bg-gray-100 {
+  @apply bg-gray-600;
+}
+
+.dark .text-gray-900 {
+  @apply text-gray-100;
+}
+
+.dark .text-gray-700 {
+  @apply text-gray-300;
+}
+
+.dark .text-gray-600 {
+  @apply text-gray-400;
+}
+
+.dark .text-gray-500 {
+  @apply text-gray-500;
+}
+
+.dark border-gray-300 {
+  @apply border-gray-600;
+}
+
+.dark border-gray-200 {
+  @apply border-gray-700;
+}
+
+/* Card styles in dark mode */
+.dark .card-dark {
+  @apply bg-gray-800 border border-gray-700 shadow-xl;
+}
+
+/* Input styles in dark mode */
+.dark .input-dark {
+  @apply bg-gray-700 border-gray-600 text-gray-100 
+         focus:ring-blue-500 focus:border-blue-500;
+}
+
+.dark .input-dark::placeholder {
+  @apply text-gray-400;
+}
+
+/* Table styles in dark mode */
+.dark .table-dark {
+  @apply bg-gray-800 border-gray-700;
+}
+
+.dark .table-dark thead {
+  @apply bg-gray-700 border-gray-600;
+}
+
+.dark .table-dark tbody tr {
+  @apply border-gray-700 hover:bg-gray-700;
+}
+
+/* Modal/Dropdown styles in dark mode */
+.dark .modal-dark {
+  @apply bg-gray-800 border border-gray-700 shadow-2xl;
+}
+
+.dark .dropdown-dark {
+  @apply bg-gray-800 border border-gray-700 shadow-xl;
+}
+
+/* Button adjustments for dark mode */
+.dark .btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-600 hover:bg-gray-500;
+}
+
+.dark .btn-danger {
+  @apply bg-red-600 hover:bg-red-700;
+}
+
+/* Scrollbar in dark mode */
+.dark .scrollbar-dark::-webkit-scrollbar-track {
+  @apply bg-gray-700;
+}
+
+.dark .scrollbar-dark::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 hover:bg-gray-400;
+}
+
+/* Skeleton loading in dark mode */
+.dark .skeleton-loading {
+  background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+  background-size: 1000px 100%;
+}
+
+/* Hover states in dark mode */
+.dark .hover-dark:hover {
+  @apply bg-gray-700;
+}
+
+/* Focus rings in dark mode */
+.dark .focus-ring-dark:focus {
+  @apply ring-blue-500 ring-offset-gray-900;
+}
