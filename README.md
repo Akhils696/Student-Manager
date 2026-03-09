@@ -1,42 +1,65 @@
 # Student Planner Application
 
-A comprehensive student management application built with the MERN stack that helps educators and students manage academic tasks, assignments, and student information.
+A comprehensive, production-ready student management application built with the MERN stack. The Student Planner helps educational institutions and students efficiently manage academic tasks, assignments, deadlines, and student information through an intuitive, responsive interface.
 
-## Features
+## Key Features
 
-- **Authentication System**: Secure JWT-based authentication with registration, login, password reset, and user profile management
-- **Student Management**: Add, edit, delete, and track student information with grid/table views
-- **Task Management**: Create, update, and track academic tasks and assignments with priority levels
-- **Dashboard**: Interactive overview with statistics, recent activity, and performance metrics
-- **Navigation**: Responsive navbar with user authentication state and routing
-- **Calendar View**: Visual representation of upcoming tasks and deadlines
-- **Advanced Filtering**: Search and filter students and tasks by multiple criteria
-- **Responsive Design**: Works seamlessly on desktop and mobile devices
+### Core Functionality
+- **Authentication & Authorization**: Secure JWT-based authentication with registration, login, password reset, and profile management
+- **Student Management**: Comprehensive CRUD operations with grid/table views, advanced search, and filtering capabilities
+- **Task Management**: Full-featured task assignment system with priority levels, status tracking, and deadline monitoring
+- **Interactive Dashboard**: Real-time statistics, performance metrics, and recent activity overview
+- **Calendar Integration**: Visual task scheduling with monthly view and deadline visualization
+- **Notification System**: Real-time alerts for upcoming deadlines (24-hour and 7-day warnings) and overdue tasks
+- **Responsive Design**: Mobile-first architecture ensuring seamless experience across all devices
+- **Dark Mode**: Complete theme support with automatic system preference detection
 
 ## Tech Stack
 
-- **Frontend**: React 18, Redux Toolkit, React Router, Tailwind CSS, Axios
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Authentication**: JSON Web Tokens (JWT) with bcrypt password hashing
-- **Testing**: Jest, Supertest, React Testing Library
-- **State Management**: Redux Toolkit with custom hooks and contexts
+### Frontend
+- **React 18**: Modern UI library with hooks and functional components
+- **Redux Toolkit**: Centralized state management
+- **React Router**: Client-side routing and navigation
+- **Tailwind CSS**: Utility-first styling with responsive breakpoints
+- **Axios**: HTTP client for API communication
+- **Vite**: Next-generation build tool for fast development
+
+### Backend
+- **Node.js**: JavaScript runtime environment
+- **Express.js**: Web application framework
+- **MongoDB**: NoSQL database
+- **Mongoose**: ODM for MongoDB
+- **JWT**: JSON Web Tokens for authentication
+- **bcrypt**: Password hashing and security
+
+### Testing & Quality
+- **Jest**: JavaScript testing framework
+- **Supertest**: HTTP assertion testing
+- **React Testing Library**: Component testing utilities
+
+### DevOps & Deployment
+- **Docker**: Containerization support
+- **Git**: Version control
+- **Automated Deployment Scripts**: Linux/Windows deployment automation
 
 ## System Architecture
 
-The application follows a client-server architecture with RESTful API design.
+The application follows a client-server architecture with RESTful API design and modern best practices.
 
 ### Backend Architecture
-- **Controllers**: Handle business logic for authentication, students, and tasks
-- **Middleware**: Authentication verification, error handling, and request validation
-- **Models**: Mongoose schemas for User, Student, and Task entities
-- **Routes**: RESTful API endpoints with proper HTTP method usage
+- **Controllers**: Business logic for authentication, students, tasks, and notifications
+- **Middleware**: JWT verification, error handling, input validation, CORS configuration
+- **Models**: Mongoose schemas for User, Student, Task entities with validation
+- **Routes**: RESTful API endpoints following HTTP method conventions
+- **Security**: Rate limiting, input sanitization, secure password hashing
 
 ### Frontend Architecture
-- **Component Library**: Modular React components organized by feature
-- **State Management**: Redux Toolkit for global state with custom hooks
+- **Component Library**: Modular, reusable React components organized by feature
+- **State Management**: Redux Toolkit for global state with custom hooks and contexts
 - **Context API**: Authentication context for user session management
 - **Service Layer**: Centralized API service with interceptors and error handling
+- **Routing**: Protected routes based on authentication status
+- **Responsive Design**: Mobile-first approach with breakpoint-based layouts
 
 ## Installation & Setup
 
@@ -216,43 +239,45 @@ student-planner/
 
 ## Key Components
 
-### Authentication System
-- **LoginForm**: Reusable login form with validation
-- **RegisterForm**: Registration form with password confirmation
-- **PasswordResetRequest**: Password reset request component
-- **UserProfile**: User profile management interface
-- **AuthContext**: Global authentication state management
+### Authentication System (6 components)
+- **LoginForm**: Reusable login form with validation and error handling
+- **RegisterForm**: Registration interface with password confirmation
+- **PasswordResetRequest**: Password reset request workflow
+- **UserProfile**: User profile management and settings
+- **AuthContext**: Global authentication state provider
 - **useAuth Hooks**: Custom hooks for authentication logic
 
-### Student Management
+### Student Management (6 components)
 - **StudentCard**: Card component for grid view display
-- **StudentTable**: Table component for list view display
+- **StudentTable**: Table component for list view with sorting
 - **StudentForm**: Comprehensive form for adding/editing students
-- **StudentDetails**: Detailed student profile view
-- **StudentSearchFilter**: Search and filter controls
-- **DeleteConfirmation**: Confirmation modal for deletions
+- **StudentDetails**: Detailed student profile view with statistics
+- **StudentSearchFilter**: Advanced search and filter controls
+- **DeleteConfirmation**: Confirmation modal for safe deletions
 
-### Task Management
+### Task Management (5 components)
 - **TaskCard**: Card component with priority and status indicators
 - **TaskTable**: Table component for task list display
 - **TaskForm**: Form for creating and editing assignments
 - **TaskDetails**: Detailed task information view
-- **TaskSearchFilter**: Search and filter by priority, status, and student
+- **TaskSearchFilter**: Multi-criteria search and filtering
 
-### Dashboard and Layout
+### Calendar & Notifications (3 components + utilities)
+- **Calendar**: Interactive monthly calendar with task visualization
+- **NotificationBell**: Real-time notification dropdown with unread counter
+- **notificationUtils**: Deadline tracking and notification management utilities
+
+### Dashboard & Layout (5 components)
 - **DashboardOverview**: Main dashboard with statistics and recent activity
 - **StatCard**: Reusable statistics card component
-- **Navbar**: Main navigation bar with user authentication
+- **Navbar**: Responsive navigation bar with user authentication
 - **Footer**: Site footer with links and information
+- **MobileNav**: Mobile-optimized hamburger menu navigation
 
-### Calendar and Notifications
-- **Calendar**: Interactive calendar view with task visualization
-- **NotificationBell**: Real-time notification system with deadline tracking
-- **NotificationUtils**: Utility functions for managing notifications
-
-### Styling and Responsive Design
-- **Responsive.css**: Comprehensive responsive design utilities
-- **DarkMode.css**: Complete dark mode theme support
+### Styling & Accessibility (2 CSS files + utilities)
+- **responsive.css**: Comprehensive responsive design utilities
+- **darkMode.css**: Complete dark mode theme implementation
+- **accessibility.js**: WCAG 2.1 compliance utilities and hooks
 
 ## Contributing
 
