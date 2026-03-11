@@ -1,40 +1,40 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* About Section */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Student Planner</h3>
-            <p className="text-gray-400 text-sm">
-              A comprehensive student management application to help educators and students track academic progress.
-            </p>
-          </div>
+    <footer className="px-4 pb-6 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-6 rounded-[28px] border border-white/30 bg-slate-950 px-6 py-8 text-white shadow-2xl shadow-slate-950/10 md:grid-cols-3">
+        <div>
+          <h3 className="font-['Space_Grotesk'] text-lg font-bold">Student Planner</h3>
+          <p className="mt-3 text-sm text-slate-300">
+            Built for teachers, tutors, and coordinators who need a clean operational view of students, tasks, and deadlines.
+          </p>
+          <p className="mt-4 text-xs uppercase tracking-[0.28em] text-cyan-300">Reliable. Focused. Fast.</p>
+        </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li><a href="/dashboard" className="hover:text-white transition-colors">Dashboard</a></li>
-              <li><a href="/students" className="hover:text-white transition-colors">Students</a></li>
-              <li><a href="/tasks" className="hover:text-white transition-colors">Tasks</a></li>
-            </ul>
-          </div>
-
-          {/* Contact Info */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Contact</h3>
-            <ul className="space-y-2 text-sm text-gray-400">
-              <li>Email: support@studentplanner.com</li>
-              <li>Phone: (555) 123-4567</li>
-            </ul>
+        <div>
+          <h3 className="font-semibold text-slate-100">Workspace</h3>
+          <div className="mt-3 flex flex-col gap-2 text-sm text-slate-300">
+            <Link to="/dashboard" className="transition hover:text-white">Dashboard</Link>
+            <Link to="/students" className="transition hover:text-white">Students</Link>
+            <Link to="/tasks" className="transition hover:text-white">Tasks</Link>
+            <Link to="/calendar" className="transition hover:text-white">Calendar</Link>
           </div>
         </div>
 
-        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
-          <p>&copy; {new Date().getFullYear()} Student Planner. All rights reserved.</p>
+        <div>
+          <h3 className="font-semibold text-slate-100">Snapshot</h3>
+          <div className="mt-3 grid grid-cols-2 gap-3 text-sm">
+            <div className="rounded-2xl bg-white/5 p-4">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Year</div>
+              <div className="mt-2 font-['Space_Grotesk'] text-xl font-bold">{new Date().getFullYear()}</div>
+            </div>
+            <div className="rounded-2xl bg-white/5 p-4">
+              <div className="text-xs uppercase tracking-[0.2em] text-slate-400">Status</div>
+              <div className="mt-2 font-['Space_Grotesk'] text-xl font-bold text-emerald-300">Live</div>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

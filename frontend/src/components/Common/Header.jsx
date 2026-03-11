@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/authSlice';
 import ThemeToggle from './ThemeToggle';
 import NotificationBell from './NotificationBell';
@@ -8,60 +8,119 @@ import NotificationBell from './NotificationBell';
 const Header = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user } = useSelector((state) => state.auth);
+  const location = useLocation();
+  const { user, token } = useSelector((state) => state.auth);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const isAuthScreen =
+    ['/login', '/register', '/forgot-password'].includes(location.pathname) ||
+    location.pathname.startsWith('/reset-password/');
+
+  const navItems = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/students', label: 'Students' },
+    { to: '/tasks', label: 'Tasks' },
+    { to: '/calendar', label: 'Calendar' },
+  ];
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
+    setMenuOpen(false);
   };
 
   return (
-    <header className="bg-blue-600 dark:bg-blue-800 text-white shadow-md transition-colors duration-300">
-      <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link to="/" className="text-xl font-bold">Student Planner</Link>
-        
-        <nav>
-          <ul className="flex space-x-6">
-            <li>
-              <Link to="/dashboard" className="hover:text-blue-200 dark:hover:text-blue-300 transition-colors">Dashboard</Link>
-            </li>
-            <li>
-              <Link to="/students" className="hover:text-blue-200 dark:hover:text-blue-300 transition-colors">Students</Link>
-            </li>
-            <li>
-              <Link to="/tasks" className="hover:text-blue-200 dark:hover:text-blue-300 transition-colors">Tasks</Link>
-            </li>
-            <li>
-              <Link to="/calendar" className="hover:text-blue-200 dark:hover:text-blue-300 transition-colors">Calendar</Link>
-            </li>
-          </ul>
-        </nav>
+    <header className="sticky top-0 z-40 px-4 pt-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[28px] border border-white/30 bg-slate-950/80 px-4 py-3 text-white shadow-2xl shadow-slate-950/20 backdrop-blur xl:px-6">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-lg font-bold text-slate-950">
+            SP
+          </div>
+          <div>
+            <div className="font-['Space_Grotesk'] text-lg font-bold">Student Planner</div>
+            <div className="text-xs text-slate-300">Operations console for students and deadlines</div>
+          </div>
+        </Link>
 
-        <div className="flex items-center space-x-4">
-          <ThemeToggle />
-          <NotificationBell />
-          {user ? (
-            <div className="flex items-center space-x-4">
-              <span>Welcome, {user.username}</span>
-              <button 
-                onClick={handleLogout}
-                className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded transition-colors"
+        {!isAuthScreen && token ? (
+          <nav className="hidden items-center gap-2 lg:flex">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `rounded-full px-4 py-2 text-sm transition ${
+                    isActive ? 'bg-white text-slate-950' : 'text-slate-200 hover:bg-white/10 hover:text-white'
+                  }`
+                }
               >
+                {item.label}
+              </NavLink>
+            ))}
+          </nav>
+        ) : (
+          <div className="hidden lg:block" />
+        )}
+
+        <div className="flex items-center gap-2 sm:gap-3">
+          <ThemeToggle />
+          {token && !isAuthScreen ? <NotificationBell /> : null}
+          {token && user ? (
+            <>
+              <Link
+                to="/profile"
+                className="hidden rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition hover:bg-white/10 md:block"
+              >
+                {user.firstName || user.username}
+              </Link>
+              <button onClick={handleLogout} className="secondary-button hidden !border-white/10 !bg-white/10 !text-white md:inline-flex">
                 Logout
               </button>
-            </div>
-          ) : (
-            <div>
-              <Link 
-                to="/login" 
-                className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded mr-2 transition-colors"
+              <button
+                onClick={() => setMenuOpen((open) => !open)}
+                className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 md:hidden"
+                aria-label="Toggle navigation menu"
               >
-                Login
-              </Link>
-            </div>
+                <span className="text-lg">{menuOpen ? 'x' : '='}</span>
+              </button>
+            </>
+          ) : (
+            <Link to="/login" className="primary-button">
+              Sign In
+            </Link>
           )}
         </div>
       </div>
+
+      {!isAuthScreen && token && menuOpen ? (
+        <div className="mx-auto mt-3 max-w-7xl rounded-[24px] border border-white/20 bg-slate-950/90 p-4 text-white shadow-xl backdrop-blur md:hidden">
+          <div className="mb-3 text-sm text-slate-300">Signed in as {user?.email}</div>
+          <div className="grid gap-2">
+            {navItems.map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                onClick={() => setMenuOpen(false)}
+                className={({ isActive }) =>
+                  `rounded-2xl px-4 py-3 text-sm ${isActive ? 'bg-white text-slate-950' : 'bg-white/5 text-slate-200'}`
+                }
+              >
+                {item.label}
+              </NavLink>
+            ))}
+            <Link
+              to="/profile"
+              onClick={() => setMenuOpen(false)}
+              className="rounded-2xl bg-white/5 px-4 py-3 text-sm text-slate-200"
+            >
+              Profile
+            </Link>
+            <button onClick={handleLogout} className="rounded-2xl bg-red-500 px-4 py-3 text-left text-sm font-semibold text-white">
+              Logout
+            </button>
+          </div>
+        </div>
+      ) : null}
     </header>
   );
 };

@@ -22,6 +22,7 @@ import TaskDetailsPage from './pages/TaskDetailsPage';
 import CalendarView from './pages/CalendarView';
 import Header from './components/Common/Header';
 import PrivateRoute from './components/Common/PrivateRoute';
+import Footer from './components/Layout/Footer';
 
 // Import new auth components
 import ForgotPassword from './components/Auth/ForgotPassword';
@@ -42,9 +43,9 @@ function AppShell() {
       <NotificationProvider>
         <ThemeProvider>
           <Router>
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+            <div className="app-shell bg-grid transition-colors duration-300">
               <Header />
-              <div className="container mx-auto px-4 py-8">
+              <main className="page-shell">
                 <Routes>
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
@@ -148,7 +149,8 @@ function AppShell() {
                   />
                   <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
-              </div>
+              </main>
+              <Footer />
               <ToastContainer />
             </div>
           </Router>
