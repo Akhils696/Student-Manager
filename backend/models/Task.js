@@ -9,6 +9,8 @@ const taskSchema = new mongoose.Schema({
   priority: { type: String, enum: ['low', 'medium', 'high'], default: 'medium' },
   status: { type: String, enum: ['pending', 'in-progress', 'completed'], default: 'pending' },
   category: { type: String }, // homework, exam, project, etc.
+  subject: { type: String },
+  notes: { type: String },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

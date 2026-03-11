@@ -34,7 +34,7 @@ const getTaskById = asyncHandler(async (req, res) => {
 // @route   POST /api/tasks
 // @access  Private
 const createTask = asyncHandler(async (req, res) => {
-  const { studentId, title, description, dueDate, priority, category } = req.body;
+  const { studentId, title, description, dueDate, priority, category, subject, notes, status } = req.body;
 
   if (!studentId || !title || !dueDate) {
     res.status(400);
@@ -49,7 +49,9 @@ const createTask = asyncHandler(async (req, res) => {
     dueDate,
     priority: priority || 'medium',
     category,
-    status: 'pending',
+    subject,
+    notes,
+    status: status || 'pending',
   });
 
   const createdTask = await task.save();
@@ -60,7 +62,7 @@ const createTask = asyncHandler(async (req, res) => {
 // @route   PUT /api/tasks/:id
 // @access  Private
 const updateTask = asyncHandler(async (req, res) => {
-  const { title, description, dueDate, priority, status, category } = req.body;
+  const { studentId, title, description, dueDate, priority, status, category, subject, notes } = req.body;
 
   const task = await Task.findById(req.params.id);
 
@@ -78,12 +80,15 @@ const updateTask = asyncHandler(async (req, res) => {
   const updatedTask = await Task.findByIdAndUpdate(
     req.params.id,
     {
+      studentId,
       title,
       description,
       dueDate,
       priority,
       status,
       category,
+      subject,
+      notes,
       updatedAt: Date.now(),
     },
     {

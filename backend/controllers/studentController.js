@@ -34,7 +34,18 @@ const getStudentById = asyncHandler(async (req, res) => {
 // @route   POST /api/students
 // @access  Private
 const createStudent = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, phone, gradeLevel, subjects, enrollmentDate, profilePicture } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    gradeLevel,
+    subjects,
+    enrollmentDate,
+    profilePicture,
+    address,
+    status,
+  } = req.body;
 
   if (!firstName || !lastName) {
     res.status(400);
@@ -51,6 +62,8 @@ const createStudent = asyncHandler(async (req, res) => {
     subjects,
     enrollmentDate,
     profilePicture,
+    address,
+    status,
   });
 
   const createdStudent = await student.save();
@@ -61,7 +74,18 @@ const createStudent = asyncHandler(async (req, res) => {
 // @route   PUT /api/students/:id
 // @access  Private
 const updateStudent = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, phone, gradeLevel, subjects, enrollmentDate, profilePicture } = req.body;
+  const {
+    firstName,
+    lastName,
+    email,
+    phone,
+    gradeLevel,
+    subjects,
+    enrollmentDate,
+    profilePicture,
+    address,
+    status,
+  } = req.body;
 
   const student = await Student.findById(req.params.id);
 
@@ -87,6 +111,8 @@ const updateStudent = asyncHandler(async (req, res) => {
       subjects,
       enrollmentDate,
       profilePicture,
+      address,
+      status,
       updatedAt: Date.now(),
     },
     {

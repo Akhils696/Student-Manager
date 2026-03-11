@@ -10,6 +10,8 @@ const studentSchema = new mongoose.Schema({
   subjects: [{ type: String }],
   enrollmentDate: { type: Date },
   profilePicture: { type: String },
+  address: { type: String },
+  status: { type: String, enum: ['active', 'inactive', 'graduated'], default: 'active' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });
