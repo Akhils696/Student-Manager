@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const mongoose = require('mongoose');
 const Student = require('../models/Student');
 
 // @desc    Get all students for logged-in user
@@ -14,6 +15,11 @@ const getStudents = asyncHandler(async (req, res) => {
 // @route   GET /api/students/:id
 // @access  Private
 const getStudentById = asyncHandler(async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    throw new Error('Invalid student ID');
+  }
+
   const student = await Student.findById(req.params.id);
 
   if (!student) {
@@ -87,6 +93,11 @@ const updateStudent = asyncHandler(async (req, res) => {
     status,
   } = req.body;
 
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    throw new Error('Invalid student ID');
+  }
+
   const student = await Student.findById(req.params.id);
 
   if (!student) {
@@ -128,6 +139,11 @@ const updateStudent = asyncHandler(async (req, res) => {
 // @route   DELETE /api/students/:id
 // @access  Private
 const deleteStudent = asyncHandler(async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(400);
+    throw new Error('Invalid student ID');
+  }
+
   const student = await Student.findById(req.params.id);
 
   if (!student) {

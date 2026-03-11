@@ -32,6 +32,14 @@ export const NotificationProvider = ({ children }) => {
 
   // Add a new notification
   const addNotification = (notification) => {
+    const alreadyExists = notifications.some(
+      (item) => item.taskId && item.taskId === notification.taskId && item.type === notification.type
+    );
+
+    if (alreadyExists) {
+      return;
+    }
+
     const newNotification = {
       id: Date.now() + Math.random(),
       ...notification,
@@ -42,7 +50,7 @@ export const NotificationProvider = ({ children }) => {
     setNotifications(prev => [newNotification, ...prev]);
     
     // Show browser notification if permission granted
-    if (Notification.permission === 'granted') {
+    if ('Notification' in window && Notification.permission === 'granted') {
       new Notification(notification.title, {
         body: notification.message,
         icon: '/favicon.ico'
@@ -84,7 +92,7 @@ export const NotificationProvider = ({ children }) => {
       const permission = await Notification.requestPermission();
       return permission === 'granted';
     }
-    return Notification.permission === 'granted';
+    return 'Notification' in window ? Notification.permission === 'granted' : false;
   };
 
   // Check for upcoming task deadlines

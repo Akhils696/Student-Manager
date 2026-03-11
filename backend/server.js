@@ -60,6 +60,10 @@ app.use('/api/tasks', require('./routes/taskRoutes'));
 app.use('/api/util', require('./routes/utilRoutes'));
 
 // Health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Student Planner API is running...' });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'OK',
