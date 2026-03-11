@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-
-const API_BASE_URL = 'http://localhost:5000/api';
+import api from '../services/api';
 
 // Get all students
-export const getStudents = createAsyncThunk('students/getStudents', async (_, { getState, rejectWithValue }) => {
+export const getStudents = createAsyncThunk('students/getStudents', async (_, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.get(`${API_BASE_URL}/students`, config);
+    const response = await api.get('/students');
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data);
+  }
+});
+
+export const getStudentById = createAsyncThunk('students/getStudentById', async (id, { rejectWithValue }) => {
+  try {
+    const response = await api.get(`/students/${id}`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data);
@@ -22,16 +22,9 @@ export const getStudents = createAsyncThunk('students/getStudents', async (_, { 
 });
 
 // Create a student
-export const createStudent = createAsyncThunk('students/createStudent', async (studentData, { getState, rejectWithValue }) => {
+export const createStudent = createAsyncThunk('students/createStudent', async (studentData, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.post(`${API_BASE_URL}/students`, studentData, config);
+    const response = await api.post('/students', studentData);
     toast.success('Student created successfully');
     return response.data;
   } catch (error) {
@@ -41,16 +34,9 @@ export const createStudent = createAsyncThunk('students/createStudent', async (s
 });
 
 // Update a student
-export const updateStudent = createAsyncThunk('students/updateStudent', async ({ id, studentData }, { getState, rejectWithValue }) => {
+export const updateStudent = createAsyncThunk('students/updateStudent', async ({ id, studentData }, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.put(`${API_BASE_URL}/students/${id}`, studentData, config);
+    const response = await api.put(`/students/${id}`, studentData);
     toast.success('Student updated successfully');
     return response.data;
   } catch (error) {
@@ -60,16 +46,9 @@ export const updateStudent = createAsyncThunk('students/updateStudent', async ({
 });
 
 // Delete a student
-export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id, { getState, rejectWithValue }) => {
+export const deleteStudent = createAsyncThunk('students/deleteStudent', async (id, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    await axios.delete(`${API_BASE_URL}/students/${id}`, config);
+    await api.delete(`/students/${id}`);
     toast.success('Student deleted successfully');
     return id;
   } catch (error) {
@@ -115,6 +94,19 @@ const studentSlice = createSlice({
         state.isError = true;
         state.errorMessage = action.payload?.message || 'Failed to fetch students';
       })
+      .addCase(getStudentById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getStudentById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.selectedStudent = action.payload;
+        state.isError = false;
+      })
+      .addCase(getStudentById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload?.message || 'Failed to fetch student';
+      })
       // Create student
       .addCase(createStudent.fulfilled, (state, action) => {
         state.students.push(action.payload);
@@ -132,6 +124,9 @@ const studentSlice = createSlice({
       // Delete student
       .addCase(deleteStudent.fulfilled, (state, action) => {
         state.students = state.students.filter(student => student._id !== action.payload);
+        if (state.selectedStudent?._id === action.payload) {
+          state.selectedStudent = null;
+        }
       });
   },
 });

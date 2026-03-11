@@ -1,20 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
 import { toast } from 'react-toastify';
-
-const API_BASE_URL = 'http://localhost:5000/api';
+import api from '../services/api';
 
 // Get all tasks
-export const getTasks = createAsyncThunk('tasks/getTasks', async (_, { getState, rejectWithValue }) => {
+export const getTasks = createAsyncThunk('tasks/getTasks', async (_, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.get(`${API_BASE_URL}/tasks`, config);
+    const response = await api.get('/tasks');
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data);
@@ -22,16 +13,18 @@ export const getTasks = createAsyncThunk('tasks/getTasks', async (_, { getState,
 });
 
 // Get tasks by student
-export const getTasksByStudent = createAsyncThunk('tasks/getTasksByStudent', async (studentId, { getState, rejectWithValue }) => {
+export const getTasksByStudent = createAsyncThunk('tasks/getTasksByStudent', async (studentId, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.get(`${API_BASE_URL}/tasks/student/${studentId}`, config);
+    const response = await api.get(`/tasks/student/${studentId}`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response?.data);
+  }
+});
+
+export const getTaskById = createAsyncThunk('tasks/getTaskById', async (id, { rejectWithValue }) => {
+  try {
+    const response = await api.get(`/tasks/${id}`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data);
@@ -39,16 +32,9 @@ export const getTasksByStudent = createAsyncThunk('tasks/getTasksByStudent', asy
 });
 
 // Create a task
-export const createTask = createAsyncThunk('tasks/createTask', async (taskData, { getState, rejectWithValue }) => {
+export const createTask = createAsyncThunk('tasks/createTask', async (taskData, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.post(`${API_BASE_URL}/tasks`, taskData, config);
+    const response = await api.post('/tasks', taskData);
     toast.success('Task created successfully');
     return response.data;
   } catch (error) {
@@ -58,16 +44,9 @@ export const createTask = createAsyncThunk('tasks/createTask', async (taskData, 
 });
 
 // Update a task
-export const updateTask = createAsyncThunk('tasks/updateTask', async ({ id, taskData }, { getState, rejectWithValue }) => {
+export const updateTask = createAsyncThunk('tasks/updateTask', async ({ id, taskData }, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    const response = await axios.put(`${API_BASE_URL}/tasks/${id}`, taskData, config);
+    const response = await api.put(`/tasks/${id}`, taskData);
     toast.success('Task updated successfully');
     return response.data;
   } catch (error) {
@@ -77,16 +56,9 @@ export const updateTask = createAsyncThunk('tasks/updateTask', async ({ id, task
 });
 
 // Delete a task
-export const deleteTask = createAsyncThunk('tasks/deleteTask', async (id, { getState, rejectWithValue }) => {
+export const deleteTask = createAsyncThunk('tasks/deleteTask', async (id, { rejectWithValue }) => {
   try {
-    const token = getState().auth.token;
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    
-    await axios.delete(`${API_BASE_URL}/tasks/${id}`, config);
+    await api.delete(`/tasks/${id}`);
     toast.success('Task deleted successfully');
     return id;
   } catch (error) {
@@ -100,6 +72,7 @@ const taskSlice = createSlice({
   initialState: {
     tasks: [],
     tasksByStudent: [],
+    selectedTask: null,
     isLoading: false,
     isError: false,
     errorMessage: '',
@@ -130,6 +103,19 @@ const taskSlice = createSlice({
       .addCase(getTasksByStudent.fulfilled, (state, action) => {
         state.tasksByStudent = action.payload;
       })
+      .addCase(getTaskById.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getTaskById.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.selectedTask = action.payload;
+        state.isError = false;
+      })
+      .addCase(getTaskById.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.errorMessage = action.payload?.message || 'Failed to fetch task';
+      })
       // Create task
       .addCase(createTask.fulfilled, (state, action) => {
         state.tasks.push(action.payload);
@@ -140,10 +126,17 @@ const taskSlice = createSlice({
         if (index !== -1) {
           state.tasks[index] = action.payload;
         }
+        if (state.selectedTask?._id === action.payload._id) {
+          state.selectedTask = action.payload;
+        }
       })
       // Delete task
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter(task => task._id !== action.payload);
+        state.tasksByStudent = state.tasksByStudent.filter(task => task._id !== action.payload);
+        if (state.selectedTask?._id === action.payload) {
+          state.selectedTask = null;
+        }
       });
   },
 });
