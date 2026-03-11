@@ -15,6 +15,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import StudentsList from './pages/StudentsList';
 import StudentDetails from './pages/StudentDetails';
+import StudentEditor from './pages/StudentEditor';
 import TasksList from './pages/TasksList';
 import CalendarView from './pages/CalendarView';
 import Header from './components/Common/Header';
@@ -72,10 +73,26 @@ function AppShell() {
                     }
                   />
                   <Route
+                    path="/students/new"
+                    element={
+                      <PrivateRoute>
+                        <StudentEditor />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
                     path="/students/:id"
                     element={
                       <PrivateRoute>
                         <StudentDetails />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/students/:id/edit"
+                    element={
+                      <PrivateRoute>
+                        <StudentEditor />
                       </PrivateRoute>
                     }
                   />

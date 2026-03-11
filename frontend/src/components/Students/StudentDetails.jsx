@@ -77,10 +77,10 @@ const StudentDetails = ({ student, onEdit, onDelete }) => {
           {/* Actions */}
           <div className="flex flex-wrap gap-4">
             <Link
-              to={`/students/${student._id}/tasks`}
+              to={`/tasks/new?studentId=${student._id}`}
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              View Tasks
+              Add Task
             </Link>
             <button
               onClick={onEdit}

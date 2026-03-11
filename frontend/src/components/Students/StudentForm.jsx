@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StudentForm = ({ formData, handleChange, handleSubmit, isLoading, errors, isEditing }) => {
+const StudentForm = ({ formData, handleChange, handleSubmit, isLoading, errors, isEditing, onCancel }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -114,6 +114,21 @@ const StudentForm = ({ formData, handleChange, handleSubmit, isLoading, errors, 
         </div>
 
         <div>
+          <label htmlFor="subjects" className="block text-sm font-medium text-gray-700 mb-2">
+            Subjects
+          </label>
+          <input
+            type="text"
+            id="subjects"
+            name="subjects"
+            value={formData.subjects}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Math, Science, English"
+          />
+        </div>
+
+        <div>
           <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
             Address
           </label>
@@ -148,6 +163,7 @@ const StudentForm = ({ formData, handleChange, handleSubmit, isLoading, errors, 
       <div className="flex justify-end space-x-4 pt-6 border-t">
         <button
           type="button"
+          onClick={onCancel}
           className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
         >
           Cancel

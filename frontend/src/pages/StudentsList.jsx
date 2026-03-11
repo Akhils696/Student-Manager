@@ -22,7 +22,7 @@ const StudentsList = () => {
   const filteredStudents = students.filter(student =>
     student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
     student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    student.email.toLowerCase().includes(searchTerm.toLowerCase())
+    (student.email || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -97,6 +97,12 @@ const StudentsList = () => {
                         className="text-indigo-600 hover:text-indigo-900 mr-4"
                       >
                         View
+                      </Link>
+                      <Link
+                        to={`/students/${student._id}/edit`}
+                        className="text-gray-600 hover:text-gray-900 mr-4"
+                      >
+                        Edit
                       </Link>
                       <button
                         onClick={() => handleDelete(student._id)}
