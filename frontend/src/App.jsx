@@ -17,6 +17,8 @@ import StudentsList from './pages/StudentsList';
 import StudentDetails from './pages/StudentDetails';
 import StudentEditor from './pages/StudentEditor';
 import TasksList from './pages/TasksList';
+import TaskEditor from './pages/TaskEditor';
+import TaskDetailsPage from './pages/TaskDetailsPage';
 import CalendarView from './pages/CalendarView';
 import Header from './components/Common/Header';
 import PrivateRoute from './components/Common/PrivateRoute';
@@ -97,10 +99,34 @@ function AppShell() {
                     }
                   />
                   <Route
+                    path="/tasks/new"
+                    element={
+                      <PrivateRoute>
+                        <TaskEditor />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
                     path="/tasks"
                     element={
                       <PrivateRoute>
                         <TasksList />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/tasks/:id"
+                    element={
+                      <PrivateRoute>
+                        <TaskDetailsPage />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="/tasks/:id/edit"
+                    element={
+                      <PrivateRoute>
+                        <TaskEditor />
                       </PrivateRoute>
                     }
                   />

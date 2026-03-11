@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TaskForm = ({ formData, handleChange, handleSubmit, isLoading, errors, students, isEditing }) => {
+const TaskForm = ({ formData, handleChange, handleSubmit, isLoading, errors, students, isEditing, onCancel }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -153,6 +153,7 @@ const TaskForm = ({ formData, handleChange, handleSubmit, isLoading, errors, stu
       <div className="flex justify-end space-x-4 pt-6 border-t">
         <button
           type="button"
+          onClick={onCancel}
           className="px-6 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
         >
           Cancel

@@ -137,6 +137,12 @@ const TasksList = () => {
                       >
                         View
                       </Link>
+                      <Link
+                        to={`/tasks/${task._id}/edit`}
+                        className="text-gray-600 hover:text-gray-900 mr-4"
+                      >
+                        Edit
+                      </Link>
                       <button
                         onClick={() => handleDelete(task._id)}
                         className="text-red-600 hover:text-red-900"
