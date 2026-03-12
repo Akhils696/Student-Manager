@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/authSlice';
@@ -22,6 +22,10 @@ const Header = () => {
     { to: '/tasks', label: 'Tasks' },
     { to: '/calendar', label: 'Calendar' },
   ];
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -80,8 +84,18 @@ const Header = () => {
                 onClick={() => setMenuOpen((open) => !open)}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-white/5 md:hidden"
                 aria-label="Toggle navigation menu"
+                aria-expanded={menuOpen}
+                aria-controls="mobile-nav-menu"
               >
-                <span className="text-lg">{menuOpen ? 'x' : '='}</span>
+                {menuOpen ? (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+                    <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
+                  </svg>
+                )}
               </button>
             </>
           ) : (
@@ -93,7 +107,7 @@ const Header = () => {
       </div>
 
       {!isAuthScreen && token && menuOpen ? (
-        <div className="mx-auto mt-3 max-w-7xl rounded-[24px] border border-white/20 bg-slate-950/90 p-4 text-white shadow-xl backdrop-blur md:hidden">
+        <div id="mobile-nav-menu" className="mx-auto mt-3 max-w-7xl rounded-[24px] border border-white/20 bg-slate-950/90 p-4 text-white shadow-xl backdrop-blur md:hidden">
           <div className="mb-3 text-sm text-slate-300">Signed in as {user?.email}</div>
           <div className="grid gap-2">
             {navItems.map((item) => (
