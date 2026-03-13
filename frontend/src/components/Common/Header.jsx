@@ -35,9 +35,9 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-40 px-4 pt-4 sm:px-6 lg:px-8">
-      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[28px] border border-white/30 bg-slate-950/80 px-4 py-3 text-white shadow-2xl shadow-slate-950/20 backdrop-blur xl:px-6">
+      <div className="mx-auto flex max-w-7xl items-center justify-between rounded-[28px] border border-white/20 bg-slate-950/78 px-4 py-3 text-white shadow-2xl shadow-slate-950/20 backdrop-blur-xl transition duration-300 xl:px-6">
         <Link to="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-lg font-bold text-slate-950">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-cyan-400 to-emerald-400 text-lg font-bold text-slate-950 shadow-lg shadow-cyan-500/20 transition duration-300 hover:scale-105">
             SP
           </div>
           <div>
@@ -53,8 +53,8 @@ const Header = () => {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `rounded-full px-4 py-2 text-sm transition ${
-                    isActive ? 'bg-white text-slate-950' : 'text-slate-200 hover:bg-white/10 hover:text-white'
+                  `rounded-full px-4 py-2 text-sm transition duration-300 ${
+                    isActive ? 'bg-white text-slate-950 shadow-lg shadow-white/10' : 'text-slate-200 hover:bg-white/10 hover:text-white'
                   }`
                 }
               >
@@ -73,7 +73,7 @@ const Header = () => {
             <>
               <Link
                 to="/profile"
-                className="hidden rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition hover:bg-white/10 md:block"
+                className="hidden rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition duration-300 hover:-translate-y-0.5 hover:bg-white/10 md:block"
               >
                 {user.firstName || user.username}
               </Link>
